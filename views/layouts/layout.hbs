@@ -5,6 +5,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha256-L/W5Wfqfa0sdBNIKN9cG6QA5F2qx4qICmU2VgLruv9Y=" crossorigin="anonymous" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="/stylesheets/codemirror-style.min.css">
+        <link rel="stylesheet" href="/stylesheets/pushy.css">
         <link rel="stylesheet" href="/stylesheets/style.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js" integrity="sha256-x3YZWtRjM8bJqf48dFAv/qmgL68SI4jqNWeSLMZaMGA=" crossorigin="anonymous"></script>
@@ -33,6 +34,25 @@
                 </ul>
             </div>
         </nav>
+        <div class="site-overlay"></div>
+            <div id="cart" class="col-md-12 pad-left-12 top-pad-10 pushy pushy-right" style="visibility: visible;">
+                <div class="row ">
+                    <div class="col-sm-12 text-right">
+                        <button class="pushy-link btn btn-primary" type="button">{{{feather 'x'}}}</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="cart" class="col-md-12">
+                    {{> cart }}
+                    <div class="row">
+                    <div class="col-sm-12 Test cart-buttons">
+                        <button class="btn btn-danger float-left" id="empty-cart" type="button"> Empty cart</button>
+                        <a href="/checkout/information" class="btn btn-primary float-right">Checkout</a>
+                    </div>
+                </div>
+                    </div>
+                </div>
+            </div>
 		<div class="container-fluid content-body h-100" id="container">
             <div class="row">
                 {{{body}}}

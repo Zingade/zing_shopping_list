@@ -16,6 +16,12 @@ $(document).ready(function (){
 
         $('#offcanvasClose').hide();
     }
+    
+    $(document).on('click', '.menu-btn', function(e){
+        e.preventDefault();
+        $('body').addClass('pushy-open-right');
+    });
+
     $(document).on('click', '.add-variant-to-cart', function(e){
         $.ajax({
             method: 'POST',
@@ -33,5 +39,10 @@ $(document).ready(function (){
         .fail(function(msg){
             showNotification(msg.responseJSON.message, 'danger');
         });
+    });
+
+
+    $(document).on('click', '.pushy-link', function(e){
+        $('body').removeClass('pushy-open-right');
     });
 });

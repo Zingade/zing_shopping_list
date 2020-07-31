@@ -86,6 +86,62 @@ app.post('/addtocart', async (req, res, next) => {
     console.log(req.body);
 });
 
+app.get('/checkout/cart', (req, res) => {
+
+    var results = [
+        {
+            _id : 1,
+            productName : "Bombay Rava",
+            productDesc : "Slect in KGs",
+            productImage : "/uploads/BombayRava.jpg"
+        },
+        {
+            _id : 2,
+            productName : "Udad Daal",
+            productDesc : "Slect in KGs",
+            productImage : "/uploads/Udad-daal.jpg"
+        },
+        {
+            _id : 3,
+            productName : "Kabuli Chana",
+            productDesc : "Slect in KGs",
+            productImage : "/uploads/Kabuli-Chana.jpg"
+        },
+        {
+            _id : 4,
+            productName : "Matki",
+            productDesc : "Slect in KGs",
+            productImage : "/uploads/Matki.jpg"
+        },
+        {
+            _id : 5,
+            productName : "Medium-Poha",
+            productDesc : "Slect in KGs",
+            productImage : "/uploads/Medium-Poha.jpg"
+        },
+        {
+            _id : 6,
+            productName : "Raajma",
+            productDesc : "Slect in KGs",
+            productImage : "/uploads/Raajma.jpg"
+        },
+        {
+            _id : 7,
+            productName : "Sona-Masoori",
+            productDesc : "Slect in KGs",
+            productImage : "/uploads/Sona-Masoori.jpg"
+        },
+    ];
+
+    console.log('testing .......');
+    res.render(`checkout-cart`, {
+        title: 'Checkout - Cart',
+        helpers: handlebars.helpers,
+        results:results
+    });
+});
+
+
 // Setup the routes
 app.get('/', function(rep,res){
     var results = [
@@ -132,7 +188,7 @@ app.get('/', function(rep,res){
             productImage : "uploads/Sona-Masoori.jpg"
         },
     ];
-    res.render('index',{title:'Zing Shop', helpers: handlebars.helpers, results:results});
+    res.render('index',{title:'Zing Shop', cartVisible: false, helpers: handlebars.helpers, results:results});
 });
 
 app.listen(app.get('port'),()=>{

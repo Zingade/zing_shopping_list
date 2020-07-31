@@ -1,0 +1,80 @@
+<div class="card top-marg-15 bottom-marg-15">
+    <div class="card-body cart-body">
+        <h5 class="card-title">Cart contents</h5>
+        <div class="cartBodyWrapper">
+            {{#each results}}
+            <div class="d-flex flex-row bottom-pad-15">
+                <div class="p-2 cart-product">
+                    <div class="row h-200">
+                        <div class="col-4 col-md-3 no-pad-left">
+                            {{#if productImage}}
+                            <img class="img-fluid" src="{{this.productImage}}" alt="{{this.productName}} product image">
+                            {{else}}
+                            <img class="img-fluid" src="/uploads/placeholder.png" alt="{{this.productName}} product image"> 
+                            {{/if}}
+                        </div>
+                        <div class="col-8 col-md-9">
+                            <div class="row">
+                                <div class="col-12 no-pad-left mt-md-4">
+                                    <h6><a href="">{{this.productName}}</a></h6>
+                                </div>
+                                <div class="col-12 col-md-6 no-pad-left mb-2">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <button class="btn btn-primary btn-qty-minus" type="button">-</button>
+                                        </div>
+                                        <input type="number" 
+                                            class="form-control cart-product-quantity text-center" 
+                                            data-cartid="1" 
+                                            data-id="{{../this.productId}}"
+                                            maxlength="2" 
+                                            value="10"
+                                        >
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary btn-qty-add" type="button">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4 col-md-2 no-pad-left">
+                                    <button class="btn btn-danger btn-delete-from-cart" data-cartid="{{@key}}" type="button">{{{feather 'trash-2'}}}</button>
+                                </div>
+                                <div class="col-12 col-md-8 no-pad-left mb-2"></div>
+                                <div class="col-8 col-md-4 align-self-center text-right">
+                                    <strong class="my-auto">$100</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        <div class="cartTotalsWrapper">
+            {{#if results}}
+            <div class="d-flex flex-row">
+                <div class="cart-contents-shipping col-md-12 no-pad-right">
+                    {{#ifCond results.length '>' 0}}
+                    <div class="text-right">
+                        Estimated Shopping: <strong id="shipping-amount">$1000</strong>
+                    </div>
+                    {{else}}
+                    <div class="text-right">
+                        <span id="shipping-amount">Estimated Shopping:</span>
+                    </div>
+                    {{/ifCond}}
+                    <div class="text-right">
+                        Total:
+                        <strong id="total-cart-amount">$12000</strong>
+                    </div>
+                </div>
+            </div>
+            {{else}}
+            <div id="cart-empty" class="d-flex flex-row">
+                <div class="cart-contents-shipping col-md-12 no-pad-left">
+                    Cart empty
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</div>
