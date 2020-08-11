@@ -1,0 +1,16 @@
+<div class="col-md-4 offset-md-4 top-pad-100">
+	<form action="/admin/product_add" method="post" class="form-signin"  method="post" role="form" data-toggle="validator">
+		<h2 class="form-signin-heading">New Item to be included</h2>
+		<div class="form-group">
+			<input type="itemName" id="itemName" name="itemName" class="form-control" placeholder="item Name" required autofocus>
+		</div>
+        <div class="col-12">
+            <div class="form-group">
+                <label for="productDescription" class="control-label">Product description *</label>
+                <textarea minlength="5" rows="10" id="productDescription" class="form-control" required></textarea>
+            </div>
+        </div>
+        <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#myModal">Upload image</button>
+		<button class="btn  btn-outline-primary btn-block" id="loginForm" type="submit">Add Item</button>
+	</form>
+</div>

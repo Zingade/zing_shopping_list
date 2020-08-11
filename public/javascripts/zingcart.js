@@ -22,6 +22,7 @@ $(document).ready(function (){
         $('body').addClass('pushy-open-right');
     });
 
+    
     $(document).on('click', '.add-variant-to-cart', function(e){
         $.ajax({
             method: 'POST',
@@ -45,4 +46,5 @@ $(document).ready(function (){
     $(document).on('click', '.pushy-link', function(e){
         $('body').removeClass('pushy-open-right');
     });
+
 });

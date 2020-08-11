@@ -2,6 +2,10 @@ const express = require('express');
 let handlebars = require('express-handlebars');
 const path = require('path');
 const bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var passport = require('passport');
+var session = require('express-session');
+const admin = require('./routes/admin');
 
 const app = express();
 
@@ -13,6 +17,10 @@ app.engine('hbs', handlebars({
     defaultLayout: 'layout.hbs',
     partialsDir: [path.join(__dirname, 'views')]
 }));
+
+var MongoStore = require('connect-mongo')(session);
+mongoose.connect('mongodb://localhost:27017/zing-shopping',{ useNewUrlParser: true, useUnifiedTopology: true });
+require('./config/passport');
 
 app.set('view engine', 'hbs');
 
@@ -82,6 +90,24 @@ app.use(express.static(path.join(__dirname, 'node_modules', 'feather-icons')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
 
+app.use((req,res,next)=>{
+    req.hbs = handlebars;
+    next();
+});
+
+app.use(session({
+    secret:'zingsupersecret',
+    resave:false, 
+    saveUninitialized: false,
+    store: new MongoStore({mongooseConnection:mongoose.connection}),
+    cookie: { maxAge: 180 * 60 * 1000 }
+  }));
+
+  app.use('/admin', admin);
+
+  app.use(passport.initialize());
+  app.use(passport.session());
+    
 app.post('/addtocart', async (req, res, next) => {
     console.log(req.body);
 });
@@ -133,7 +159,6 @@ app.get('/checkout/cart', (req, res) => {
         },
     ];
 
-    console.log('testing .......');
     res.render(`checkout-cart`, {
         title: 'Checkout - Cart',
         helpers: handlebars.helpers,
@@ -143,7 +168,7 @@ app.get('/checkout/cart', (req, res) => {
 
 
 // Setup the routes
-app.get('/', function(rep,res){
+app.get('/', function(req,res){
     var results = [
         {
             _id : 1,
@@ -188,7 +213,8 @@ app.get('/', function(rep,res){
             productImage : "uploads/Sona-Masoori.jpg"
         },
     ];
-    res.render('index',{title:'Zing Shop', cartVisible: false, helpers: handlebars.helpers, results:results});
+
+    res.render('index',{title:'Zing Shop', cartVisible: false, helpers: handlebars.helpers, results:results, admin:req.session.isAdmin});
 });
 
 app.listen(app.get('port'),()=>{

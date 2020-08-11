@@ -7,9 +7,14 @@
         <link rel="stylesheet" href="/stylesheets/codemirror-style.min.css">
         <link rel="stylesheet" href="/stylesheets/pushy.css">
         <link rel="stylesheet" href="/stylesheets/style.css">
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js" integrity="sha256-x3YZWtRjM8bJqf48dFAv/qmgL68SI4jqNWeSLMZaMGA=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha256-WqU1JavFxSAMcLP2WIOI+GB2zWmShMI82mTpLDcqFUg=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.25.0/feather.min.js" integrity="sha256-NvgyqkM9Vu1DLHkzxTxXQxZNdDymUlwhXcSJEqUfPiU=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js" integrity="sha256-LlHVI5rUauudM5ZcZaD6hHPHKrA7CSefHHnKgq+/AZc=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.7/js/tether.min.js" integrity="sha256-4lietOiwRDBKx1goZZbRiwB06L+/bPYEGDIKZt82bgg=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 		<script src="/javascripts/zingcart.js"></script>
     </head>
 <body>
@@ -31,6 +36,9 @@
                         </div>
                     </div>
                         <li class="nav-item"><a href="/checkout/cart" class="btn menu-btn">{{{feather 'shopping-cart'}}} "Cart" <span class="badge badge-danger" id="cart-count">0</span></a></li>
+                        {{#if admin}}
+                        <li class="nav-item"><a href="/admin/product_add" class="btn menu-btn1">{{{feather 'plus'}}} "New" </a></li>
+                        {{/if}}
                 </ul>
             </div>
         </nav>
