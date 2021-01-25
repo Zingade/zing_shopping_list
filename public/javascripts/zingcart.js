@@ -28,9 +28,7 @@ $(document).ready(function (){
             method: 'POST',
             url: '/addtocart',
             data: {
-                productId: $(this).attr('data-id'),
-                productQuantity: $('#quantity1').val(),
-                productVariant: '1'
+                productId: $(this).attr('data-id')
             }
         })
 		.done(function(msg){
@@ -48,3 +46,4 @@ $(document).ready(function (){
     });
 
 });
+

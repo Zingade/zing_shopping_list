@@ -1,47 +1,41 @@
 {{> menu}}
-
+<script>
+function doTheThings()
+{
+    setTimeout(function(){
+        location.reload();
+    },100);
+} 
+</script>
 <div class="productsWrapper col-sm-12 col-md-8 offset-md-2">
     <div class="row product-layout">
-        {{#ifCond results.length '==' 0}}
+        {{#ifCond main_results.length '==' 0}}
             <div class="col-sm-12">
-                <p class="text-danger">{{ @root.__ "No products found" }}</p>
+                <p class="text-danger">"No products found"</p>
             </div>
         {{/ifCond}}
-        {{#each results}}
+        {{#each main_results}}
             <div class="{{perRowClass 3}}">
                 <div class="thumbnail">
-                    {{#if productPermalink}}
-                        <div class="product-wrapper">
-                            <a href="/">
-                                <div class="vertical-center img-thumbnail">
-                                    {{#if productImage}}
-                                        <img class="img-fluid" src="{{this.productImage}}" alt="..." >
-                                    {{else}}
-                                        <img class="img-fluid" src="/uploads/placeholder.png" alt="...">
-                                    {{/if}}
-                                </div>
-                                <h3 class="product-title product-title-home top-pad-10">
-                                    {{this.productName}}
-                                </h3>
-                            </a>
+                    <div class="product-wrapper">
+                    <a href="/}">
+                        <div class="vertical-center img-thumbnail">
+                            {{#if imagePath}}
+                                <img class="img-fluid" src="{{this.imagePath}}" alt="...">
+                            {{else}}
+                                <img class="img-fluid" src="/uploads/placeholder.png" alt="...">
+                            {{/if}}
                         </div>
-                    {{else}}
-                        <a href="/}">
-                            <div class="vertical-center img-thumbnail">
-                                {{#if productImage}}
-                                    <img class="img-fluid" src="{{this.productImage}}" alt="...">
-                                {{else}}
-                                    <img class="img-fluid" src="/uploads/placeholder.png" alt="...">
-                                {{/if}}
-                            </div>
-                            <h3 class="product-title product-title-home top-pad-10">
-                                {{this.productName}}
-                            </h3>
-                        </a>
-                    {{/if}}
+                        <h3 class="product-title product-title-home top-pad-10">
+                            {{this.productName}}
+                        </h3>
+                        <h4 class="product-price mp-0 text-center">
+                            ₹{{this.productPrice}}
+                        </h4>
+                    </a>
+                    </div>
                     <p class="text-center">
-                        <div class="quantities pull-left">Quantity : <input type="text" size="3" id="quantity{{this._id}}"> </div>
-                        <a class="btn btn-primary add-variant-to-cart" data-id="{{this._id}}" role="button">"Add to cart"</a>
+                    <a class="btn btn-primary add-variant-to-cart" data-id="{{this._id}}" role="button" onClick="doTheThings()">"Add to cart" </a>
                     </p>
                 </div>
             </div>

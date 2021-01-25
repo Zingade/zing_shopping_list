@@ -1,7 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const fs = require("fs");
+const path = require('path');
 var User = require('../user');
 var bcrypt = require('bcrypt-nodejs');
+var multer = require("multer");
+const mongoose = require('mongoose');
+var Product = require('../database/products');
 
 router.get('/setup',  (req, res) => {
     res.render('setup', {
@@ -23,6 +28,48 @@ router.get('/product_add', (req, res) => {
     helpers: req.hbs.helpers
     });
 });
+
+// SET STORAGE
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'public//uploads')
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.fieldname + '-' + Date.now())
+    }
+  });
+
+var upload = multer({ storage: storage });
+
+router.post('/product_add', upload.single('myImage'),(req,res)=>{
+    console.log(req.body);
+    console.log(req.file);
+
+    Product.findOne({'productName':req.body.itemName}, function(err,user){
+        if(err){
+            console.log(err);
+            return; 
+        }
+        if (user) {
+            console.log("Product Already exists");
+            return; 
+        }
+    
+        var product = new Product();
+        product._id = req.file.filename;
+        product.productName = req.body.itemName;
+        product.productPrice = req.body.itemPrice;
+        product.productDescription = req.body.productDescription;
+        product.imagePath = req.file.path.replace("public\\","");
+        product.save((err, doc) => {
+            if (err) {
+                console.log('Error during record insertion : ' + err);
+            }
+        });
+    });
+    res.redirect('/')
+});
+
 
 
 router.post('/login_action', function(req,res){

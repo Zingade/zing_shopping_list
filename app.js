@@ -6,6 +6,11 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var session = require('express-session');
 const admin = require('./routes/admin');
+const accountSid = 'AC3a1697d63463f6cc86eceb9e0b554c70'; 
+const authToken = 'd4c7c8e82ebe560c3d185a0728e48d90'; 
+const client = require('twilio')(accountSid, authToken); 
+const Product = mongoose.model('Product');
+var Cart = require('./database/cart');
 
 const app = express();
 
@@ -92,6 +97,7 @@ app.use(bodyParser.json())
 
 app.use((req,res,next)=>{
     req.hbs = handlebars;
+    res.locals.session = req.session;
     next();
 });
 
@@ -109,15 +115,40 @@ app.use(session({
   app.use(passport.session());
     
 app.post('/addtocart', async (req, res, next) => {
-    console.log(req.body);
+
+    productId = req.body.productId;
+    var cart = new Cart(req.session.cart?req.session.cart:{});
+    Product.findById(productId, function(err, product){
+        if(err){
+            console.log("Error in finding the "+productId+'in Database');
+            return res.redirect('/');
+        }
+        cart.add(product, productId);
+        req.session.cart = cart;
+        res.redirect('/');
+    });
+});
+
+
+
+app.get('/checkout/information', (req, res) => {
+    client.messages 
+    .create({ 
+       body: 'Bombay Rava 500gm', 
+       from: 'whatsapp:+14155238886',       
+       to: 'whatsapp:+919845210251' 
+     }) 
+    .then(message => console.log(message.sid)) 
+    .done();
 });
 
 app.get('/checkout/cart', (req, res) => {
 
+
     var results = [
         {
             _id : 1,
-            productName : "Bombay Rava",
+            productName : "Bombay Rava1",
             productDesc : "Slect in KGs",
             productImage : "/uploads/BombayRava.jpg"
         },
@@ -169,56 +200,27 @@ app.get('/checkout/cart', (req, res) => {
 
 // Setup the routes
 app.get('/', function(req,res){
-    var results = [
+    Product.find((err, docs) => {
+        if (err) {
+            console.log('Error in retrieving product list :' + err);
+            return;
+        }
+        var results=[];
+        for(var i=0;i<docs.length;i++)
         {
-            _id : 1,
-            productName : "Bombay Rava",
-            productDesc : "Slect in KGs",
-            productImage : "uploads/BombayRava.jpg"
-        },
-        {
-            _id : 2,
-            productName : "Udad Daal",
-            productDesc : "Slect in KGs",
-            productImage : "uploads/Udad-daal.jpg"
-        },
-        {
-            _id : 3,
-            productName : "Kabuli Chana",
-            productDesc : "Slect in KGs",
-            productImage : "uploads/Kabuli-Chana.jpg"
-        },
-        {
-            _id : 4,
-            productName : "Matki",
-            productDesc : "Slect in KGs",
-            productImage : "uploads/Matki.jpg"
-        },
-        {
-            _id : 5,
-            productName : "Medium-Poha",
-            productDesc : "Slect in KGs",
-            productImage : "uploads/Medium-Poha.jpg"
-        },
-        {
-            _id : 6,
-            productName : "Raajma",
-            productDesc : "Slect in KGs",
-            productImage : "uploads/Raajma.jpg"
-        },
-        {
-            _id : 7,
-            productName : "Sona-Masoori",
-            productDesc : "Slect in KGs",
-            productImage : "uploads/Sona-Masoori.jpg"
-        },
-    ];
+            results[i]=docs[i].toObject();
+        }
 
-    res.render('index',{title:'Zing Shop', cartVisible: false, helpers: handlebars.helpers, results:results, admin:req.session.isAdmin});
+        cart = new Cart(req.session.cart||{});
+        arr  = cart.generateArray();
+        res.render('index',{title:'Zing Shop', helpers: handlebars.helpers, main_results:results,results:arr, totalQty:cart.totalQty, totalPrice:cart.totalPrice,admin:req.session.isAdmin});
+    });
 });
+
 
 app.listen(app.get('port'),()=>{
     console.log('Server is running....', 4000);
 });
+
 
 module.exports = app;
