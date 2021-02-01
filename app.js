@@ -6,8 +6,8 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var session = require('express-session');
 const admin = require('./routes/admin');
-const accountSid = 'AC3a1697d63463f6cc86eceb9e0b554c70'; 
-const authToken = 'd4c7c8e82ebe560c3d185a0728e48d90'; 
+const accountSid = 'XXXX'; 
+const authToken = 'YYYYY'; 
 const client = require('twilio')(accountSid, authToken); 
 const Product = mongoose.model('Product');
 var Cart = require('./database/cart');
@@ -129,7 +129,79 @@ app.post('/addtocart', async (req, res, next) => {
     });
 });
 
+app.post('/updatecart', async (req, res, next) => {
 
+    const cartItem = req.body;
+    productId = req.body.productId;
+    // Check cart exists
+
+    if(!req.session.cart){
+        emptyCart(req, res, 'json', 'There are no items if your cart or your cart is expired');
+        return;
+    }
+
+    Product.findById(productId, function(err, product){
+        if(err){
+            console.log("Error in finding the "+productId+'in Database');
+            return res.redirect('/');
+        }
+    });
+
+    // Calculate the quantity to update
+    let productQuantity = cartItem.quantity ? cartItem.quantity : 1;
+    if(typeof productQuantity === 'string'){
+        productQuantity = parseInt(productQuantity);
+    }
+
+    if(productQuantity === 0){
+        // quantity equals zero so we remove the item
+        delete req.session.cart[cartItem.productId];
+        console.log("There was an error updating the cart");
+        return;
+    }
+
+
+    // Check for a cart
+    if(!req.session.cart.items[cartItem.productId]){
+        console.log("There was an error updating the cart");
+        return;
+    }
+
+    const cartProduct = req.session.cart.items[cartItem.productId];
+
+    const deltaQty = productQuantity - req.session.cart.items[cartItem.productId].Qty; 
+    req.session.cart.items[cartItem.productId].Qty = productQuantity; 
+    req.session.cart.items[cartItem.productId].price = productQuantity * cartProduct.item.productPrice;
+    req.session.cart.totalQty += deltaQty;
+    req.session.cart.totalPrice += deltaQty * cartProduct.item.productPrice;
+
+
+    Product.updateOne({ sessionId: req.session.id }, {
+        $set: { cart: req.session.cart }
+    });
+
+    res.redirect('/');
+});
+
+
+app.post('/removefromcart', async (req, res, next) => {
+
+    productId = req.body.productId;
+
+    // Check for item in cart
+    if(!req.session.cart.items[productId]){
+        console.log(req.body, 'Product not found in cart');
+    }
+
+    req.session.cart.totalQty -= req.session.cart.items[productId].Qty;
+    req.session.cart.totalPrice -= req.session.cart.items[productId].price;
+
+    // remove item from cart
+    delete req.session.cart.items[productId];
+
+    console.log('Product successfully removed');
+    res.redirect('/');
+});
 
 app.get('/checkout/information', (req, res) => {
     client.messages 
