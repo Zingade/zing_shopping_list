@@ -14,6 +14,8 @@ var Cart = require('./database/cart');
 
 const app = express();
 
+//nwFwXZHvF9fOOVca
+
 // view engine setup
 app.set('views', path.join(__dirname, '/views'));
 app.engine('hbs', handlebars({
@@ -24,7 +26,7 @@ app.engine('hbs', handlebars({
 }));
 
 var MongoStore = require('connect-mongo')(session);
-mongoose.connect('mongodb://localhost:27017/zing-shopping',{ useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/zing-shopping',{ useNewUrlParser: true, useUnifiedTopology: true });
 require('./config/passport');
 
 app.set('view engine', 'hbs');
