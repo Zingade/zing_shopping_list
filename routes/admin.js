@@ -60,7 +60,7 @@ router.post('/product_add', upload.single('myImage'),(req,res)=>{
         product.productName = req.body.itemName;
         product.productPrice = req.body.itemPrice;
         product.productDescription = req.body.productDescription;
-        product.imagePath = req.file.path.replace("public\\","");
+        product.imagePath = req.file.path.replace("public\\",""); 
         product.save((err, doc) => {
             if (err) {
                 console.log('Error during record insertion : ' + err);

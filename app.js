@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config()
 let handlebars = require('express-handlebars');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -11,6 +12,8 @@ const authToken = 'YYYYYYY';
 const client = require('twilio')(accountSid, authToken); 
 const Product = mongoose.model('Product');
 var Cart = require('./database/cart');
+
+const port = process.env.PORT || 4000
 
 const app = express();
 
@@ -91,7 +94,6 @@ handlebars = handlebars.create({
     }
 });
 
-app.set('port', process.env.PORT || 4000);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules', 'feather-icons')));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -292,9 +294,10 @@ app.get('/', function(req,res){
 });
 
 
-app.listen(app.get('port'),()=>{
-    console.log('Server is running....', 4000);
-});
+app.listen(port, () => {
+    console.log(`Zing Shop app listening at http://localhost:${port}`)
+})
+
 
 
 module.exports = app;
